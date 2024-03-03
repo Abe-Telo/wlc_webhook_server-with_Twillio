@@ -27,8 +27,6 @@ eventType: Call
 
 method: sms or whatsapp
 
+timeZone: New_York
 
 ![image](https://github.com/Abe-Telo/wlc_webhook_server-with_Twillio/assets/29134216/b8f5ece4-2277-4fc8-bd44-a78d80dc3faf)
-
-
-timeZone: New_York
