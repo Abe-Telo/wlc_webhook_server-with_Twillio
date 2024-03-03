@@ -2,7 +2,9 @@
 
 
 apt-get install npm
+
 apt-get install node.js
+
 apt-get install openssl 
 
 
@@ -11,18 +13,18 @@ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -node
 
 chmod 600 key.pem
 
-
 npm install express twilio body-parser moment-timezone
 
 
-Send the follwing data. 
+
+Send the follwing data when sending data. 
 
 URL https://YourserverURL:3000/sendMessage
 
-phoneNumber:
+phoneNumber: Phone number that will receave numbers. 
 
-eventType:
+eventType: Call
 
-method:
+method: sms or whatsapp
 
-timeZone:
+timeZone: New_York
