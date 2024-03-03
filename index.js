@@ -2,26 +2,25 @@ const express = require('express');
 const twilio = require('twilio');
 const https = require('https');
 const fs = require('fs');
-const bodyParser = require('body-parser');  
-const moment = require('moment-timezone');   
+const bodyParser = require('body-parser'); // Add body-parser to handle JSON body
+const app = express();
 
 // SSL Certificate paths
-const privateKeyPath = '/root/WLC-Webhook/key.pem';
-const certificatePath = '/root/WLC-Webhook/cert.pem';
-
+const privateKeyPath = '/root/wlc-webhook/key.pem';  // Change path to Key.pem
+const certificatePath = '/root/wlc-webhook/cert.pem';  // Change path to Cert.pem
+const passphrase = '0000';  // Key Pam credentials Password you set up. 
+ 
 // Twilio credentials
-const accountSid = 'YourSID';
-const authToken = 'YourToken';
-const twilioPhoneNumber = '1234567890';
-const whatsappNumber = 'whatsapp:+1234567890';
-
-const app = express();
+const accountSid = 'YourSID'; // Your Twilio SID
+const authToken = 'YourToken';  // Your Twilio Token
+const twilioPhoneNumber = '1234567890';  // Your Twilio From Phone Number for SMS
+const whatsappNumber = 'whatsapp:+1234567890';  // Your Twilio From Whatsapp Number to send from.
 
 // SSL credentials
 const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
 const certificate = fs.readFileSync(certificatePath, 'utf8');
-const passphrase = '0000';
 const credentials = { key: privateKey, cert: certificate, passphrase: passphrase };
+const moment = require('moment-timezone');
 
 // Twilio client
 const client = new twilio(accountSid, authToken);
@@ -29,26 +28,27 @@ const client = new twilio(accountSid, authToken);
 // Use body-parser to parse JSON body
 app.use(bodyParser.json());
 
-app.post('/sendMessage', (req, res) => {
-    //const { phoneNumber, multipleNumbers, eventType, method } = req.body;
-	const { phoneNumber, multipleNumbers, eventType, method, timestamp, timeZone, caller_id_number, caller_id_name, call_direction } = req.body; // You can Add data. 
+app.post('/sendMessage', (req, res) => { 
+	const { phoneNumber, multipleNumbers, eventType, method, timestamp, timeZone, caller_id_number, caller_id_name, call_direction } = req.body;
 
     // Convert timestamp to Date
-    const date = new Date(timestamp);
+    //const date = new Date(timestamp);
+    const date = new Date(timestamp * 1000); // timestamp is in seconds 
+   
+    // Convert timestamp
     let formattedDate;
 
     // Format the date based on the provided timeZone
-    // If timeZone is provided, use it with "America/" prefix
     if (timeZone) {
-        formattedDate = moment(date).tz(`America/${timeZone}`).format('MM/DD/YYYY');
+        formattedDate = moment(date).tz(`America/${timeZone}`).format('HH:mm:ss');
     } else {
-        // If no timeZone is provided, use the default timezone
-        formattedDate = moment(date).format('MM/DD/YYYY');
+        formattedDate = moment(date).format('HH:mm:ss');
     }
-
+	
     // Log the entire request body to see what data is being received
     console.log('Received data:', req.body);
-
+    console.log('Formatted Date Time:', formattedDate); 
+	
     if (!method) {
         return res.status(400).send('Method is required');
     }
