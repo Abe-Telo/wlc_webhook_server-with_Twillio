@@ -1,12 +1,10 @@
-Send Notifications From WLC Wbhook to a SMS or whatsapp using twilio.
-
+**Send Notifications From WLC Wbhook to a SMS or whatsapp using twilio.**
 
 
 apt-get install npm
-
 apt-get install node.js
-
 apt-get install openssl 
+
 
 
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
